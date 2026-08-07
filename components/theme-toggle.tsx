@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -11,20 +10,18 @@ export function ThemeToggle() {
   React.useEffect(() => setMounted(true), []);
 
   if (!mounted) {
-    return <div className="h-10 w-10" aria-hidden="true" />;
+    return <div style={{ width: 40, height: 40 }} aria-hidden="true" />;
   }
 
   const isDark = resolvedTheme === "dark";
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
+    <button
+      className="btn-icon"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="rounded-full text-base"
     >
       {isDark ? "☀️" : "🌙"}
-    </Button>
+    </button>
   );
 }

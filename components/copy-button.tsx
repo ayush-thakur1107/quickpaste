@@ -2,15 +2,14 @@
 
 import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy } from "lucide-react";
-import { Button, type ButtonProps } from "@/components/ui/button";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
-interface CopyButtonProps extends Omit<ButtonProps, "onClick"> {
+interface CopyButtonProps {
   text: string;
   label?: string;
   copiedLabel?: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function CopyButton({
@@ -18,7 +17,7 @@ export function CopyButton({
   label = "Copy",
   copiedLabel = "Copied!",
   className,
-  ...props
+  style,
 }: CopyButtonProps) {
   const [copied, setCopied] = React.useState(false);
 
@@ -35,12 +34,11 @@ export function CopyButton({
   };
 
   return (
-    <Button
+    <button
       type="button"
-      variant="secondary"
+      className={`btn-secondary${className ? ` ${className}` : ""}`}
+      style={style}
       onClick={handleCopy}
-      className={cn("min-w-[9.5rem]", className)}
-      {...props}
     >
       <AnimatePresence mode="wait" initial={false}>
         {copied ? (
@@ -50,10 +48,8 @@ export function CopyButton({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.15 }}
-            className="inline-flex items-center gap-2"
           >
-            <Check className="h-4 w-4" />
-            {copiedLabel}
+            ✓ {copiedLabel}
           </motion.span>
         ) : (
           <motion.span
@@ -62,13 +58,11 @@ export function CopyButton({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.15 }}
-            className="inline-flex items-center gap-2"
           >
-            <Copy className="h-4 w-4" />
-            {label}
+            📋 {label}
           </motion.span>
         )}
       </AnimatePresence>
-    </Button>
+    </button>
   );
 }
