@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Loader2, FileText, KeyRound, Clock, Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -152,24 +152,24 @@ export function PasteApp() {
   };
 
   return (
-    <div className="w-full max-w-xl">
+    <div className="w-full">
       <div className="mb-4 flex justify-end">
         <ThemeToggle />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>QuickPaste</CardTitle>
+          <CardTitle>quickpaste</CardTitle>
           <CardDescription>
-            {"Paste text.\nGet a code.\nRetrieve it anytime."}
+            {"the fastest way to move text between your devices\n(seriously, it takes like 3 seconds)"}
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           <Tabs value={tab} onValueChange={(v) => setTab(v as "save" | "retrieve")}>
             <TabsList>
-              <TabsTrigger value="save">Save Text</TabsTrigger>
-              <TabsTrigger value="retrieve">Retrieve</TabsTrigger>
+              <TabsTrigger value="save">drop some text</TabsTrigger>
+              <TabsTrigger value="retrieve">grab it back</TabsTrigger>
             </TabsList>
 
             {/* --- SAVE TAB --- */}
@@ -180,14 +180,14 @@ export function PasteApp() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   onKeyDown={handleTextareaKeyDown}
-                  placeholder="Paste your text here..."
+                  placeholder="dump your text here... go wild"
                   rows={8}
                   maxLength={MAX_CHARS}
                   aria-label="Text to save"
                   className="min-h-[180px]"
                 />
                 <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-                  <span>Ctrl/Cmd + Enter to generate</span>
+                  <span>protip: ctrl+enter works too</span>
                   <span className={cn(text.length > MAX_CHARS * 0.95 && "text-destructive")}>
                     {text.length.toLocaleString()} / {MAX_CHARS.toLocaleString()}
                   </span>
@@ -196,7 +196,7 @@ export function PasteApp() {
 
               <label
                 htmlFor="delete-after-reading"
-                className="flex items-center gap-3 rounded-2xl border border-input bg-secondary/30 px-4 py-3 cursor-pointer select-none"
+                className="flex items-center gap-3 rounded-xl border border-input bg-secondary/30 px-4 py-3 cursor-pointer select-none"
               >
                 <Checkbox
                   id="delete-after-reading"
@@ -205,24 +205,23 @@ export function PasteApp() {
                 />
                 <span className="flex items-center gap-2 text-sm">
                   <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
-                  Delete after reading
+                  self-destruct mode 💣
                 </span>
               </label>
 
               <Button
                 onClick={handleGenerate}
                 disabled={saving || text.trim().length === 0}
-                className="w-full"
+                className="w-full hover-bounce"
               >
                 {saving ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Generating...
+                    working on it...
                   </>
                 ) : (
                   <>
-                    <FileText className="h-4 w-4" />
-                    Generate Code
+                    📋 gimme a code
                   </>
                 )}
               </Button>
@@ -232,12 +231,12 @@ export function PasteApp() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="rounded-2xl border border-input bg-secondary/40 p-5 text-center space-y-3"
+                  className="rounded-xl border border-input bg-secondary/40 p-5 text-center space-y-3"
                 >
                   <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                    Generated Code
+                    here&apos;s ur code 👇
                   </p>
-                  <p className="text-3xl font-bold tracking-[0.25em]">
+                  <p className="font-display text-3xl font-bold tracking-[0.25em]">
                     {generatedCode}
                   </p>
                   <CopyButton text={generatedCode} label="Copy Code" />
@@ -256,20 +255,21 @@ export function PasteApp() {
                     setNotFound(false);
                   }}
                   onKeyDown={handleCodeInputKeyDown}
-                  placeholder="Enter code..."
+                  placeholder="enter your code..."
                   aria-label="Paste code"
                   autoCapitalize="characters"
                 />
                 <Button
                   onClick={handleRetrieve}
                   disabled={retrieving || codeInput.trim().length === 0}
+                  className="hover-bounce"
                 >
                   {retrieving ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <KeyRound className="h-4 w-4" />
+                    "↗"
                   )}
-                  Retrieve
+                  fetch it
                 </Button>
               </div>
 
@@ -280,7 +280,7 @@ export function PasteApp() {
                   className="text-sm text-destructive text-center"
                   role="alert"
                 >
-                  Code not found.
+                  nope, couldn&apos;t find that one 🤷
                 </motion.p>
               )}
 
@@ -301,8 +301,7 @@ export function PasteApp() {
                   <div className="flex items-center justify-between gap-3">
                     {retrievedAt && (
                       <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Clock className="h-3.5 w-3.5" />
-                        {formatTimestamp(retrievedAt)}
+                        🕐 {formatTimestamp(retrievedAt)}
                       </span>
                     )}
                     <CopyButton text={retrievedText} label="Copy Text" className="ml-auto" />
