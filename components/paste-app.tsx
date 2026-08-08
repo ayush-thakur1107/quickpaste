@@ -68,7 +68,12 @@ export function PasteApp() {
       if (!res.ok) { toast.error(data.error ?? "Failed to generate a code."); return; }
       setGeneratedCode(data.code);
       window.localStorage.setItem(RECENT_CODE_KEY, data.code);
-      toast.success("Code generated!");
+      try {
+        await navigator.clipboard.writeText(data.code);
+        toast.success("Code generated & copied to clipboard!");
+      } catch {
+        toast.success("Code generated!");
+      }
     } catch {
       toast.error("Network error. Please try again.");
     } finally {
@@ -95,6 +100,12 @@ export function PasteApp() {
       if (!res.ok) { toast.error(data.error ?? "Failed to retrieve text."); return; }
       setRetrievedText(data.text);
       setRetrievedAt(data.createdAt);
+      try {
+        await navigator.clipboard.writeText(data.text);
+        toast.success("Text retrieved & copied to clipboard!");
+      } catch {
+        toast.success("Text retrieved!");
+      }
     } catch {
       toast.error("Network error. Please try again.");
     } finally {
